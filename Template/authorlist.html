@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>  
+  <meta charset="utf-8" />
+  <title>Kindle电子书下载-分享 | 作者列表</title>
+  <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="shortcut icon" href="/static/images/ico/favicon.ico" />
+    <link rel="stylesheet" href="/static/js/jPlayer/jplayer.flat.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/simple-line-icons.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/app.css" type="text/css" />
+  
+  <!--[if lt IE 9]>
+    <script src="js/ie/html5shiv.js"></script>
+    <script src="js/ie/respond.min.js"></script>
+    <script src="js/ie/excanvas.js"></script>
+  <![endif]-->
+    <script>
+           function myfun() {
+           var islogin='{{ LoginStatus }}'
+            if(islogin=='1'){
+                 $(".UserInfo").show();
+            }else{
+                 $(".UserInfo").hide();
+            }
+        }
+          function Logout() {
+            $.ajax({
+               url:'/Logout/',
+               type:'POST',
+               success:function(args) {
+                    window.location='/index/';
+               },
+               error:function () {
+               }
+           });
+        }
+    </script>
+</head>
+<body class="" onload="myfun()">
+  <section class="vbox">
+   <header class="bg-white-only header header-md navbar navbar-fixed-top-xs">
+      <div class="navbar-header aside bg-primary nav-xs">
+        <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
+          <i class="icon-list"></i>
+        </a>
+        <span  class="navbar-brand text-lt" id="IndexImg">
+          <i class="icon-book-open"></i>
+          <img src="/static/images/logo.png" alt="." class="hide">
+          <span class="hidden-nav-xs m-l-sm">主页</span>
+        </span>
+        <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
+          <i class="icon-settings"></i>
+        </a>
+      </div>      <ul class="nav navbar-nav hidden-xs">
+        <li>
+          <a href="#nav,.navbar-header" data-toggle="class:nav-xs,nav-xs" class="text-muted" onclick="shousuo()">
+            <i class="fa fa-indent text"></i>
+            <i class="fa fa-dedent text-active"></i>
+          </a>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-sm bg-white btn-icon rounded"><i class="fa fa-search"></i></button>
+            </span>
+            <input type="text" class="form-control input-sm no-border rounded" placeholder="搜书名、作家、类型">
+          </div>
+        </div>
+      </form>
+      <div class="UserInfo navbar-right" >
+        <ul class="nav navbar-nav m-n hidden-xs nav-user user"  >
+          <li class="hidden-xs">
+
+            <section class="dropdown-menu aside-xl animated fadeInUp">
+              <section class="panel bg-white">
+                <div class="panel-heading b-light bg-light">
+                  <strong>You have <span class="count">2</span> notifications</strong>
+                </div>
+                <div class="list-group list-group-alt">
+                  <a href="#" class="media list-group-item">
+                    <span class="pull-left thumb-sm">
+                      <img src="/static/images/a0.png" alt="..." class="img-circle">
+                    </span>
+                    <span class="media-body block m-b-none">
+                      Use awesome animate.css<br>
+                      <small class="text-muted">10 minutes ago</small>
+                    </span>
+                  </a>
+                  <a href="#" class="media list-group-item">
+                    <span class="media-body block m-b-none">
+                      1.0 initial released<br>
+                      <small class="text-muted">1 hour ago</small>
+                    </span>
+                  </a>
+                </div>
+                <div class="panel-footer text-sm">
+                  <a href="#" class="pull-right"><i class="fa fa-cog"></i></a>
+                  <a href="#notes" data-toggle="class:show animated fadeInRight">See all the notifications</a>
+                </div>
+              </section>
+            </section>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle bg clear" data-toggle="dropdown" style="width: 240px;">
+              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+                <img src="/static/images/User/{{ HeadImg }}" alt="...">
+              </span>
+              {{ User }}<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu animated fadeInRight">
+              <li>
+                <span class="arrow top"></span>
+                <a href="#">个人中心</a>
+              </li>
+              <li>
+                <a href="profile.html">我的推送</a>
+              </li>
+              <li>
+                <a href="#">
+                  <span class="badge bg-danger pull-right">3</span>
+                  信息
+                </a>
+              </li>
+              <li>
+                <a href="docs.html">帮助文档</a>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a href="#" onclick="Logout()" >退出登录</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </header>
+    <section>
+      <section class="hbox stretch">
+        <!-- .aside -->
+        <aside class="bg-black dk nav-xs aside hidden-print" id="nav">
+          <section class="vbox">
+            <section class="w-f-md scrollable">
+              <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railOpacity="0.2">
+                <!-- nav -->
+                <nav class="nav-primary hidden-xs">
+                  <ul class="nav bg clearfix">
+                    <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">
+                      导航列表
+                    </li>
+                    <li>
+                      <a href="/index">
+                        <i class="icon-notebook text-success"></i>
+                        <span class="font-bold">主页</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/authorlist">
+                        <i class=" icon-note icon text-danger"></i>
+                        <span class="font-bold">作家</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/type">
+                        <i class="icon-drawer icon text-primary-lter"></i>
+                        <span class="font-bold">类型</span>
+                      </a>
+                    </li>
+                    <li class="UserInfo">
+                      <a href="/addbook">
+                        <i class="fa fa-cloud-upload text  text-info-dker"></i>
+                        <span class="font-bold">上传书籍</span>
+                      </a>
+                    </li>
+                       <li>
+                      <a href="/blog">
+                        <i class="icon-calendar text text-default"></i>
+                        <span class="font-bold">博客</span>
+                      </a>
+                    </li>
+                      <li class="UserInfo">
+                      <a href="/user/">
+                        <i class="icon-users icon  text-danger"></i>
+                        <span class="font-bold">个人中心</span>
+                      </a>
+                    </li>
+                    <li>
+                    <li>
+                      <a href="/img">
+                        <i class="icon-picture icon"></i>
+                        <span>图片</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+                <!-- / nav -->
+              </div>
+            </section>
+          </section>
+        </aside>
+        <!-- /.aside -->
+
+             <section id="content">
+          <section class="vbox">
+            <section class="scrollable wrapper">
+              <h3 class="m-t-none font-thin">热门作家</h3>
+              <div class="row">
+                  {% for x in author %}
+                <div class="col-lg-{{ x.cishu }} " >
+                  <section class="panel panel-default" >
+                    <a href="/authordetils/name/{{ x.bookauthor }}"><div  class="panel-body">{{ x.bookauthor }}</div></a>
+                  </section>
+                </div>
+                  {% endfor %}
+                  </div>
+                </div>
+
+              </div>
+            </section>
+          </section>
+          <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
+        </section>
+      </section>
+    </section>
+  </section>
+
+
+
+  <script src="/static/js/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/static/js/bootstrap.js"></script>
+  <!-- App -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/s/slimscroll/jquery.slimscroll.min.js"></script>
+  
+  <script src="/static/js/app.plugin.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/jquery.jplayer.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/add-on/jplayer.playlist.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/demo.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>  
+  <meta charset="utf-8" />
+  <title>Kindle电子书下载-分享 | 作者</title>
+  <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+     <script src="/static/js/jquery.min.js"></script>
+     <script type="text/javascript" src="/static/js/layer/layer.js"></script>
+    <link rel="shortcut icon" href="/static/images/ico/favicon.ico" />
+    <link rel="stylesheet" href="/static/js/jPlayer/jplayer.flat.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/simple-line-icons.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/app.css" type="text/css" />
+    <!--[if lt IE 9]>
+    <script src="/static/js/ie/html5shiv.js"></script>
+    <script src="/static/js/ie/respond.min.js"></script>
+    <script src="/static/js/ie/excanvas.js"></script>
+  <![endif]-->
+    <script>
+        function NotLogin() {
+             layer.open({
+              type: 1
+              ,title: false
+              ,closeBtn: false
+              ,area: '300px;'
+              ,shade: 0.8
+              ,id: 'LAY_layuipro'
+              ,resize: false
+              ,btn: ['注册', '登录']
+              ,btnAlign: 'c'
+              ,moveType: 1
+              ,content: '<div style="padding: 50px; line-height: 22px; background-color:white; color: #3B3B3B; font-weight: 300;"><h4>温馨提示:</h4></b><br><br>还没有登录噢！<br><br>你可以前往注册页面注册账号! <br><br>已有本站账号?那就直接登录吧！<br><br><br><br></div>'
+              ,success: function(layero){
+                var btn = layero.find('.layui-layer-btn');
+                btn.find('.layui-layer-btn0').attr({
+                  href: '/signup/'
+                });
+                 btn.find('.layui-layer-btn1').attr({
+                  href: '/signin/'
+                });
+              }
+            });
+        }
+
+        function downloadFile(url) {
+            try{
+                var elemIF = document.createElement("iframe");
+                elemIF.src = url;
+                elemIF.style.display = "none";
+                document.body.appendChild(elemIF);
+            }catch(e){
+
+            }
+        }
+
+        function DownCount(data){
+            $.ajax({
+               url:'/AddDownNum/',
+               type:'POST',
+               data:{'data':data},
+               success:function(args) {
+                    if(args=='DeficiencyOfIntegral')
+                    {
+                         layer.alert('积分不够啦！赶快上传赚取吧！', {
+                         skin: 'layui-layer-lan'
+                         ,closeBtn: 0
+                         ,anim: 3
+                         });
+                    }
+                    else if(args=='LoginFaile')
+                    {
+                         NotLogin()
+                    }else{
+                         document.getElementById(data).textContent=args.split(',')[0]
+                         downloadFile('/static/book/'+args.split(',')[1])
+                    }
+               },
+               error:function () {
+                    layer.open({
+                      type: 1
+                      ,title: false
+                      ,closeBtn: false
+                      ,area: '300px;'
+                      ,shade: 0.8
+                      ,id: 'LAY_layuipro'
+                      ,resize: false
+                      ,btn: ['前往反馈', '唉，算了吧']
+                      ,btnAlign: 'c'
+                      ,moveType: 1
+                      ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;"><b>好尴尬...</b><br><br><br><br>下载似乎遇到了点问题<br><br>你可以前往反馈页面进行反馈噢 <br><br>反馈可以获得10积分噢！<br><br><br><br></div>'
+                      ,success: function(layero){
+                      var btn = layero.find('.layui-layer-btn');
+                      btn.find('.layui-layer-btn0').attr({
+                      href: '/Feedback/'
+                      ,target: '_blank'
+                        });
+                      }
+                    });
+               }
+           });
+        }
+
+        function Logout() {
+            $.ajax({
+               url:'/Logout/',
+               type:'POST',
+               success:function(args) {
+                    window.location='/index/';
+               },
+               error:function () {
+               }
+           });
+        }
+
+        function myfun()
+        {
+           var islogin='{{ LoginStatus }}'
+            if(islogin=='1'){
+                 $(".UserInfo").show();
+            }else{
+                 $(".UserInfo").hide();
+            }
+
+            {% for x in LikeBookID %}
+                var doc=({{ x.BookId }}+'x')
+                $('#'+doc).css('display','');
+                var doc1=({{ x.BookId }}+'y')
+                $('#'+doc1).css('display','none');
+            {% endfor %}
+
+        }
+        //书籍点赞
+        function zan(id) {
+            $.ajax({
+                url:"/dianzan/",
+                type:"POST",
+                data:{'data':id},
+                success:function (arg) {
+                    arg=jQuery.parseJSON(arg)
+                    if (arg.status=='未登录'){
+                        NotLogin()
+                    }else if(arg.status=='点赞失败'){
+                        layer.msg('点赞失败');
+                    }else if(arg.status=='取消点赞'){
+                         $('.'+id).text(arg.count);
+                         layer.msg('你不爱我了（*>.<*）~ @ ');
+                    }else{
+                         $('.'+id).text(arg.count);
+                         layer.msg('点赞成功');
+                    }
+                }
+            });
+        }
+        //推送
+        function pushbook(id) {
+            $.ajax({
+                    url:"/pushbook/",
+                    type:"POST",
+                    data:{'data':id},
+                    success:function (arg) {
+                        arg=jQuery.parseJSON(arg)
+                        if (arg.status=='未登录'){
+                            NotLogin()
+                        }else if(arg.status=='在列表中'){
+                             layer.msg('客官勿急，书籍已经在推送列表中');
+                        }else if(arg.status=='推送'){
+                             layer.msg('已加入推送列表，请耐心等候');
+                             var doc=(id+'z')
+                             $('#'+doc).text(arg.pushnum)
+                        }else if(arg.status=='推送异常'){
+                             layer.msg('推送异常');
+                        }
+                    }
+                });
+            }
+    </script>
+    
+</head>
+<body class="" onload="myfun()">
+  <section class="vbox">
+      <header class="bg-white-only header header-md navbar navbar-fixed-top-xs">
+      <div class="navbar-header aside bg-primary nav-xs">
+        <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
+          <i class="icon-list"></i>
+        </a>
+        <span  class="navbar-brand text-lt" id="IndexImg">
+          <i class="icon-book-open"></i>
+          <img src="/static/images/logo.png" alt="." class="hide">
+          <span class="hidden-nav-xs m-l-sm">主页</span>
+        </span>
+        <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
+          <i class="icon-settings"></i>
+        </a>
+      </div>      <ul class="nav navbar-nav hidden-xs">
+        <li>
+          <a href="#nav,.navbar-header" data-toggle="class:nav-xs,nav-xs" class="text-muted" onclick="shousuo()">
+            <i class="fa fa-indent text"></i>
+            <i class="fa fa-dedent text-active"></i>
+          </a>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-sm bg-white btn-icon rounded"><i class="fa fa-search"></i></button>
+            </span>
+            <input type="text" class="form-control input-sm no-border rounded" placeholder="搜书名、作家、类型">
+          </div>
+        </div>
+      </form>
+      <div class="UserInfo navbar-right" >
+        <ul class="nav navbar-nav m-n hidden-xs nav-user user"  >
+          <li class="hidden-xs">
+
+            <section class="dropdown-menu aside-xl animated fadeInUp">
+              <section class="panel bg-white">
+                <div class="panel-heading b-light bg-light">
+                  <strong>You have <span class="count">2</span> notifications</strong>
+                </div>
+                <div class="list-group list-group-alt">
+                  <a href="#" class="media list-group-item">
+                    <span class="pull-left thumb-sm">
+                      <img src="/static/images/a0.png" alt="..." class="img-circle">
+                    </span>
+                    <span class="media-body block m-b-none">
+                      Use awesome animate.css<br>
+                      <small class="text-muted">10 minutes ago</small>
+                    </span>
+                  </a>
+                  <a href="#" class="media list-group-item">
+                    <span class="media-body block m-b-none">
+                      1.0 initial released<br>
+                      <small class="text-muted">1 hour ago</small>
+                    </span>
+                  </a>
+                </div>
+                <div class="panel-footer text-sm">
+                  <a href="#" class="pull-right"><i class="fa fa-cog"></i></a>
+                  <a href="#notes" data-toggle="class:show animated fadeInRight">See all the notifications</a>
+                </div>
+              </section>
+            </section>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle bg clear" data-toggle="dropdown" style="width: 240px;">
+              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+                <img src="/static/images/User/{{ HeadImg }}" alt="...">
+              </span>
+              {{ User }}<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu animated fadeInRight">
+              <li>
+                <span class="arrow top"></span>
+                <a href="#">个人中心</a>
+              </li>
+              <li>
+                <a href="profile.html">我的推送</a>
+              </li>
+              <li>
+                <a href="#">
+                  <span class="badge bg-danger pull-right">3</span>
+                  信息
+                </a>
+              </li>
+              <li>
+                <a href="docs.html">帮助文档</a>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a href="#" onclick="Logout()" >退出登录</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </header>
+    <section>
+      <section class="hbox stretch">
+        <!-- .aside -->
+          <aside class="bg-black dk nav-xs aside hidden-print" id="nav">
+          <section class="vbox">
+            <section class="w-f-md scrollable">
+              <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railOpacity="0.2">
+                <!-- nav -->
+                <nav class="nav-primary hidden-xs">
+                  <ul class="nav bg clearfix">
+                    <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">
+                      导航列表
+                    </li>
+                    <li>
+                      <a href="/index">
+                        <i class="icon-notebook text-success"></i>
+                        <span class="font-bold">主页</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/authorlist">
+                        <i class=" icon-note icon text-danger"></i>
+                        <span class="font-bold">作家</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/type">
+                        <i class="icon-drawer icon text-primary-lter"></i>
+                        <span class="font-bold">类型</span>
+                      </a>
+                    </li>
+                    <li class="UserInfo">
+                      <a href="/addbook">
+                        <i class="fa fa-cloud-upload text  text-info-dker"></i>
+                        <span class="font-bold">上传书籍</span>
+                      </a>
+                    </li>
+                       <li>
+                      <a href="/blog">
+                        <i class="icon-calendar text text-default"></i>
+                        <span class="font-bold">博客</span>
+                      </a>
+                    </li>
+                      <li class="UserInfo">
+                      <a href="/user/">
+                        <i class="icon-users icon  text-danger"></i>
+                        <span class="font-bold">个人中心</span>
+                      </a>
+                    </li>
+                    <li>
+                    <li>
+                      <a href="/img">
+                        <i class="icon-picture icon"></i>
+                        <span>图片</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+                <!-- / nav -->
+              </div>
+            </section>
+          </section>
+        </aside>
+        <!-- /.aside -->
+        <section id="content" >
+          <section class="vbox" id="bjax-el">
+            <section class="scrollable padder-lg">
+              <h4 class="font-thin m-b">热门作品</h4>
+              <div class="row row-sm">
+                  {% for x in data %}
+                         <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                      <div class="item">
+                        <div class="pos-rlt">
+                        <div class="top">
+                            <span class="pull-right m-t-sm m-r-sm badge bg-info" id="{{ x.BookID }}">{{ x.DownNum }}</span>
+                        </div>
+                          <div class="bottom">
+                            <span class="badge bg-info m-l-sm m-b-sm">{{ x.PushNum }}</span>
+                          </div>
+                          <div class="item-overlay opacity r r-2x bg-black">
+                            <div class="text-info padder m-t-sm text-sm">
+                                <h4>{{ x.rating }}</h4>
+                            </div>
+                             <div class="center text-center m-t-n">
+                              <a  href="#"><i onclick="DownCount('{{ x.BookID }}')" class="icon-cloud-download i-3x"></i></a>
+                            </div>
+
+                            <div class="bottom padder m-b-sm" onclick="shouchang()">
+                                {#点赞#}
+                              <a href="#" class="pull-right" id="{{ x.BookID }}y"  onclick="zan({{ x.BookID }})" data-toggle="class">
+                                <i class="fa fa-heart-o text "></i>
+                                <i class="fa fa-heart text-active text-danger"></i>
+                              </a>
+                              {#取消赞#}
+                              <a href="#" class="pull-right active" id="{{ x.BookID }}x" onclick="zan({{ x.BookID }})" data-toggle="class" style="display: none">
+                                <i class="fa fa-heart-o text "></i>
+                                <i class="fa fa-heart text-active text-danger"></i>
+                              </a>
+
+                              {#推送#}
+                              <a href="#"  onclick="pushbook({{ x.BookID }})" data-toggle="class">
+                                <i class="fa fa-plus-circle text" ></i>
+                                <i class="fa fa-check-circle text-active text-info"></i>
+                              </a>
+                            </div>
+                          </div>
+
+                          <a href="#"><img  height="250" src="/static/images/mpic/{{ x.ImgAdd }}" alt="" class="r r-2x img-full"></a>
+                        </div>
+                        <div class="padder-v">
+                          <a href="/bookdetils/{{ x.BookID }}" class="text-ellipsis">{{x.BookName  }}</a>
+                          <span class="text-ellipsis text-xs text-muted"> {{ x.BookIntroduction }} </span>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+              </div>
+              <h4 class="font-thin m-b">作品列表</h4>
+             {% for x in data1 %}
+              <div class="row row-sm">
+                       <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                      <div class="item">
+                        <div class="pos-rlt">
+                        <div class="top">
+                            <span class="pull-right m-t-sm m-r-sm badge bg-info" id="{{ x.BookID }}">{{ x.DownNum }}</span>
+                        </div>
+                          <div class="bottom">
+                            <span class="badge bg-info m-l-sm m-b-sm">{{ x.PushNum }}</span>
+                          </div>
+                          <div class="item-overlay opacity r r-2x bg-black">
+                            <div class="text-info padder m-t-sm text-sm">
+                                <h4>{{ x.rating }}</h4>
+                            </div>
+                             <div class="center text-center m-t-n">
+                              <a  href="#"><i onclick="DownCount('{{ x.BookID }}')" class="icon-cloud-download i-3x"></i></a>
+                            </div>
+                            <div class="bottom padder m-b-sm" onclick="shouchang()">
+                              <a href="#" class="pull-right" id="{{ x.BookID }}y"  onclick="zan({{ x.BookID }})" data-toggle="class">
+                                <i class="fa fa-heart-o text "></i>
+                                <i class="fa fa-heart text-active text-danger"></i>
+                              </a>
+                              {#取消赞#}
+                              <a href="#" class="pull-right active" id="{{ x.BookID }}x" onclick="zan({{ x.BookID }})" data-toggle="class" style="display: none">
+                                <i class="fa fa-heart-o text "></i>
+                                <i class="fa fa-heart text-active text-danger"></i>
+                              </a>
+
+                              {#推送#}
+                              <a href="#"  onclick="pushbook({{ x.BookID }})" data-toggle="class">
+                                <i class="fa fa-plus-circle text" ></i>
+                                <i class="fa fa-check-circle text-active text-info"></i>
+                              </a>
+                            </div>
+                          </div>
+
+                          <a href="#"><img  height="250" src="/static/images/mpic/{{ x.ImgAdd }}" alt="" class="r r-2x img-full"></a>
+                        </div>
+                        <div class="padder-v">
+                          <a href="/bookdetils/{{ x.BookID }}" class="text-ellipsis">{{x.BookName  }}</a>
+                          <span class="text-ellipsis text-xs text-muted"> {{ x.BookIntroduction }} </span>
+                        </div>
+                      </div>
+                    </div>
+             {% endfor %}
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+              <ul class="pagination pagination">
+               <li>
+                  {% for x in page_num %}
+                      <li  onclick="PageChange('{{ forloop.counter }}')"><a id="{{ forloop.counter }}" href="{{ x }}">{{ forloop.counter }}</a></li>
+                  {% endfor %}
+                </li>
+              </ul>
+            </div>
+      </section>
+          </section>
+    </section>
+        </section>
+
+  <script src="/static/js/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/static/js/bootstrap.js"></script>
+  <!-- App -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/static/js/app.plugin.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/jquery.jplayer.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/add-on/jplayer.playlist.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/demo.js"></script>
+
+</body>
+</html>

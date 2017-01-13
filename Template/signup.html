@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>  
+  <meta charset="utf-8" />
+  <title>Kindle电子书下载-分享 | 注册</title>
+  <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+     <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/layer/layer.js"></script>
+    <link rel="shortcut icon" href="/static/images/ico/favicon.ico" />
+    <link rel="stylesheet" href="/static/js/jPlayer/jplayer.flat.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/simple-line-icons.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/app.css" type="text/css" />
+    <!--[if lt IE 9]>
+    <script src="/static/js/ie/html5shiv.js"></script>
+    <script src="/static/js/ie/respond.min.js"></script>
+    <script src="/static/js/ie/excanvas.js"></script>
+  <![endif]-->
+    <script>
+        function Agreement() {
+          layer.open({
+          type: 2,
+          title: '网站注册协议',
+          shadeClose: true,
+          shade: 0.8,
+          area: ['380px', '90%'],
+          content: '/index/' //iframe的url
+        });
+        }
+    </script>
+</head>
+<body class="bg-info dker" style="background-image: url(/static/images/other/bg2.jpg);">
+  <section id="content" class="m-t-lg wrapper-md animated fadeInDown">
+    <div class="container aside-xl">
+      <a class="navbar-brand block" href="../index/"><span class="h1 font-bold">Kindle Book</span></a>
+      <section class="m-b-lg">
+        <header class="wrapper text-center">
+          <strong>欢迎注册Kindle book</strong>
+        </header>
+        <form action="../signup/" method="post">
+          <div class="form-group">
+              {{ form.UserName }}
+          </div>
+          <div class="form-group">
+              {{ form.Email }}
+          </div>
+          <div class="form-group">
+              {{ form.PassWord }}
+          </div>
+            <div class="form-group">
+              {{ form.RePassWord }}
+          </div>
+          <div class="checkbox i-checks m-b">
+            <label class="m-l">
+              <input type="checkbox" checked=""><i></i> 同意 <span href="" onclick="Agreement()" id="Agreement">网站注册协议</span>
+            </label>
+              <label style="color:chartreuse">
+                  {{ Error }}
+              </label>
+          </div>
+          <button type="submit" class="btn btn-lg btn-warning lt b-white b-2x btn-block btn-rounded"><i class="icon-arrow-right pull-right"></i><span class="m-r-n-lg">注册</span></button>
+          <div class="line line-dashed"></div>
+          <p class="text-muted text-center"><small>已有账号?</small></p>
+          <a href="../signin" class="btn btn-lg btn-info btn-block btn-rounded">直接登录</a>
+        </form>
+      </section>
+    </div>
+  </section>
+  <!-- footer -->
+  <footer id="footer">
+    <div class="text-center padder clearfix">
+      <p>
+        <small>Kindle book<br>&copy; 2016</small>
+      </p>
+    </div>
+  </footer>
+  <!-- / footer -->
+
+  <!-- Bootstrap -->
+  <script src="/static/js/bootstrap.js"></script>
+  <!-- App -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/static/js/app.plugin.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/jquery.jplayer.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/add-on/jplayer.playlist.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/demo.js"></script>
+
+</body>
+</html>

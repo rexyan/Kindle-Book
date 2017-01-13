@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>  
+  <meta charset="utf-8" />
+  <title>Kindle电子书下载-分享 | 登录</title>
+  <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+     <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/layer/layer.js"></script>
+    <link rel="shortcut icon" href="/static/images/ico/favicon.ico" />
+    <link rel="stylesheet" href="/static/js/jPlayer/jplayer.flat.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/simple-line-icons.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/app.css" type="text/css" />
+    <!--[if lt IE 9]>
+    <script src="/static/js/ie/html5shiv.js"></script>
+    <script src="/static/js/ie/respond.min.js"></script>
+    <script src="/static/js/ie/excanvas.js"></script>
+  <![endif]-->
+    <script>
+        function aaa() {
+            layer.open({
+              type: 1
+              ,title: false
+              ,closeBtn: false
+              ,area: '300px;'
+              ,shade: 0.8
+              ,id: 'LAY_layuipro'
+              ,resize: false
+              ,btn: ['知道了']
+              ,btnAlign: 'c'
+              ,moveType: 1
+              ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;"><b>登录失败</b><br>请检查账号和密码是否正确！</div>'
+              ,success: function(layero){
+                var btn = layero.find('.layui-layer-btn');
+                btn.find('.layui-layer-btn0').attr({
+                  href: '/signin/'
+                });
+              }
+            });
+        }
+    </script>
+</head>
+
+<body class="bg-info dker" style="background-image: url(/static/images/other/bg.jpg);">
+  <section id="content" class="m-t-lg wrapper-md animated fadeInUp" >
+    <div class="container aside-xl">
+      <a class="navbar-brand block" href="../index/"><span class="h1 font-bold">Kindle Book</span></a>
+      <section class="m-b-lg">
+        <header class="wrapper text-center">
+          <strong>账户登录</strong>
+        </header>
+        <form action="../signin/" method="POST">
+          <div class="form-group">
+                 {{ form.Email }}
+          </div>
+          <div class="form-group">
+                 {{ form.PassWord }}
+          </div>
+          <button id="login" type="submit"  class="btn btn-lg btn-warning lt b-white b-2x btn-block btn-rounded"><i class="icon-arrow-right pull-right"></i><span class="m-r-n-lg">登录</span></button>
+          <div class="text-center m-t m-b"><a href="#"><small>忘记密码?</small></a>
+               {% ifequal Status 0 %}
+                    <script>
+                         aaa()
+                    </script>
+                {% endifequal %}
+          </div>
+          <p class="text-muted text-center"><small>还没有账号?</small></p>
+          <a href="../signup" class="btn btn-lg btn-info btn-block rounded">创建新账号</a>
+        </form>
+      </section>
+    </div>
+  </section>
+  <!-- footer -->
+  <footer id="footer">
+    <div class="text-center padder">
+      <p>
+        <small>Kindle book<br>&copy; 2016</small>
+      </p>
+    </div>
+  </footer>
+  <!-- / footer -->
+
+  <!-- Bootstrap -->
+  <script src="/static/js/bootstrap.js"></script>
+  <!-- App -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/static/js/app.plugin.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/jquery.jplayer.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/add-on/jplayer.playlist.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/demo.js"></script>
+</body>
+</html>
