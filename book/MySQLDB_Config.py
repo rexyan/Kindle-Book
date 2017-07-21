@@ -3,7 +3,7 @@
 import  MySQLdb
 
 def connection(select,sql):
-     connection = MySQLdb.connect(host='127.0.0.1', user='root', passwd='18525350524Yrs', db='book', charset='utf8',
+     connection = MySQLdb.connect(host='', user='', passwd='', db='', charset='utf8',
                              cursorclass=MySQLdb.cursors.DictCursor)
      cursor = connection.cursor()
      cursor.execute(sql)
