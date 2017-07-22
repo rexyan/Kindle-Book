@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '9+b2gqdk28#2#e)1ax^ie&2!)(uqv@)*&j6+j#99x^c@&n!&s^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -87,12 +87,12 @@ WSGI_APPLICATION = 'book.wsgi.application'
 
 DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': '',
-        'USER':'',
-        'PASSWORD':'',
-        'HOST':'',
-        'PORT':'',
+        'ENGINE': u'django.db.backends.mysql',
+        'NAME': u'kbook',
+        'USER':u'root',
+        'PASSWORD':u'123456',
+        'HOST':u'127.0.0.1',
+        'PORT':u'3306',
     }
 }
 

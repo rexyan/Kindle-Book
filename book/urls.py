@@ -29,14 +29,14 @@ urlpatterns = [
     url(r'^signin/$', views.signin),
     url(r'^signup/$', views.signup),
     url(r'^addbook/$', views.upload),
-    url(r'^authordetils/name', views.AuthorDetils),
-    url(r'^bookdetils/', views.ShowBookDetils),
+    url(r'^authordetils/name/(\w*)', views.AuthorDetils),
+    url(r'^bookdetils/(\w*)', views.ShowBookDetils),
     url(r'^type/$', views.showtype),
     url(r'^authorlist/$', views.showauthorlist),
     url(r'^blog/$', views.blog),
     url(r'^img/$', views.images),
     url(r'^user/$', views.usercenter),
-    url(r'^typedetils/name', views.typedetils),
+    url(r'^typedetils/name/(\w*)', views.typedetils),
 
     # ajax
     url(r'^CheckInfo_for_DouBan/$', views.CheckInfo_for_DouBan),

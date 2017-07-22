@@ -1,6 +1,6 @@
-#--*--coding:utf-8--*--
-
-from django.shortcuts import render,render_to_response
+# --*--coding:utf-8--*--
+from django.shortcuts import render
+from django.shortcuts import render_to_response
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect
@@ -29,7 +29,7 @@ def index(request):
     row=MySQLDB_Config.connection(1,sql)
 
     #查询热门作家
-    BookAuthor=models.BookInfo.objects.all().order_by('rating')[0:5].values('BookAuthor','author_intro')
+    BookAuthor=models.BookInfo.objects.all().order_by('rating')[0:5].values('BookAuthor','author_intro','BookID')
 
     #获取热门类型
     sql='select booktype,count(*) from home_booktype group by booktype order by count(*) desc limit 20 ;'
@@ -229,7 +229,7 @@ def UploadFiles(request):
 
            # 保存上传的文件信息
            FileObj=uf.cleaned_data
-           name= FileObj['FileAdd']
+           name= str(time.time())+str(FileObj['FileAdd'])
            obj=models.UploadFile(BookId=infor['id'],UpUser=request.session.get('user', default="Rex"),FileName=name,FileAdd=name)  #文件上传
            obj.save()
 
@@ -253,9 +253,16 @@ def UploadFiles(request):
         return render_to_response('upload.html', {'obj': UploadFormObj, 'status': '0'})
 
 #作者详情页面
-def AuthorDetils(request):
-    Author =(request.path_info).encode('utf-8').split('/')[4]
-    if Author!='all':
+def AuthorDetils(request, param):
+    '''
+    :param request:
+    :param param: 书籍ID或者all，当为书籍ID时，应该根据ID获取作者
+    :return:
+    '''
+    if param != 'all':
+        sql = 'select BookAuthor from home_bookinfo where BookID="%s"' % (param)
+        row = MySQLDB_Config.connection(1, sql)
+        Author = row[0]['BookAuthor']
         # 查询热门作品书籍信息,采用sql方式两表联查
         sql = 'select  a.ImgAdd,a.BookID,a.BookName,a.BookAuthor,a.DownNum,a.PushNum,a.rating,a.BookIntroduction,b.FileName from home_bookinfo a,home_uploadfile b where a.BookID = b.BookID and a.BookAuthor="%s" order by a.DownNum DESC  limit 6 ;'%(Author)
         row = MySQLDB_Config.connection(1, sql)
@@ -282,10 +289,10 @@ def AuthorDetils(request):
         startpage =(page - 1) * pagenum
         endpage = page * pagenum
 
-        Page_Yangshi = []
+        page_html = []
         for x in range(Max_Page_Num):
-            str = ('/authordetils/name/%s/%d/' % (Author,int(x)+1))
-            Page_Yangshi.append(str)
+            str = ('/authordetils/name/%s/%d/' % (param,int(x)+1))
+            page_html.append(str)
 
         sql = 'select  a.ImgAdd,a.BookID,a.BookName,a.BookAuthor,a.DownNum,a.PushNum,a.rating,a.BookIntroduction,b.FileName from home_bookinfo a,home_uploadfile b where a.BookID = b.BookID and a.BookAuthor="%s" order by a.PushNum DESC  limit %d,%d  ;' % (Author,startpage,endpage)
         row1 = MySQLDB_Config.connection(1, sql)
@@ -310,7 +317,7 @@ def AuthorDetils(request):
             LikeObj = models.Like.objects.filter(User=islogin).values('BookId')
         else:
             LoginStatus = 0
-        return render_to_response('author.html', {'data': row, 'data1': row1, 'page_num': Page_Yangshi,'LoginStatus':LoginStatus,'HeadImg':img,'User':UserName})
+        return render_to_response('author.html', {'data': row, 'data1': row1, 'page_num': page_html,'LoginStatus':LoginStatus,'HeadImg':img,'User':UserName})
     else:
         return render_to_response('author.html')
 
@@ -346,8 +353,8 @@ def AddDownNumCount(request):
         return HttpResponse('LoginFaile')
 
 #书籍详情页面
-def ShowBookDetils(request):
-    BookID = (request.path_info).encode('utf-8').split('/')[3]
+def ShowBookDetils(request, param):
+    BookID = param
     # 查询书籍信息,采用sql方式两表联查
     sql = 'select  a.BookID,a.publisher,a.BookPublishTime,a.ImgAdd,a.BookName,a.BookAuthor,a.DownNum,a.PushNum,a.rating,b.UpUser from home_bookinfo a,home_uploadfile b where a.BookID = b.BookID AND a.BookID=%d ;'%(int(BookID))
     row = MySQLDB_Config.connection(1, sql)
@@ -493,7 +500,7 @@ def usercenter(request):
         UserObj=models.UserInfo.objects.filter(Email=islogin)
         FileObj=models.UploadFile.objects.filter(UpUser=islogin).count()
         # 获取用户头像
-        UserObj = models.UserInfo.objects.filter(Email=islogin).values('HeadImg', 'UserName')
+        UserObj = models.UserInfo.objects.filter(Email=islogin).values('HeadImg', 'UserName', 'Integral')
         UserName = UserObj[0]['UserName']
         img = UserObj[0]['HeadImg']
         if img == "":
@@ -505,11 +512,8 @@ def usercenter(request):
         return HttpResponseRedirect('/signin')
 
 #类别详情页
-def typedetils(request):
-    try:
-        TypeName = (request.path_info).encode('utf-8').split('/')[4]
-    except Exception,e:
-        return render_to_response('typedetils.html')
+def typedetils(request, param):
+    TypeName = param
     sql = 'select  a.ImgAdd,a.BookID,a.BookName,a.BookAuthor,a.DownNum,a.PushNum,a.rating,b.FileName from home_bookinfo a,home_uploadfile b,home_booktype c where a.BookID = b.BookID and b.BookID=c.BookId and c.BookType="%s" order by a.DownNum DESC ;'%(TypeName)
     row11 = MySQLDB_Config.connection(1, sql)
 

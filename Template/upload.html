@@ -40,6 +40,7 @@
                type:'POST',
                data:{'data':data},
                success:function(data) {
+                   debugger;
                    $('#author').val(data.split(',')[0])  //作者
                    $('#bookimg').attr("src",data.split(',')[1]);    //图片
                    $('#title').val(data.split(',')[2])   //书名
@@ -237,25 +238,34 @@
         <section id="content" style="height:600px;">
           <section class="wrapper">
           <div class="m-b">
-            <span class="h3 font-thin"><i class="i i-arrow-left3"></i> 豆瓣源</span>
+            <span class="h4 font-thin"><i class="i i-arrow-left3"></i> 豆瓣源</span>
           </div>
           <section class="panel panel-default">
             <header class="panel-heading">
               No.1 获取书籍在豆瓣链接
             </header>
           <header class="panel-heading">
-                  <div class="input-group text-sm">
-                    <input type="text" class="input-sm form-control" id="doubanurl" placeholder="例子：http://book.douban.com/subject/1234567">
-                    <div class="input-group-btn">
-                      <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">选项 <span class="caret"></span></button>
-                      <ul class="dropdown-menu pull-right">
-                        <li><a href="#" id="tiqu" onclick="tiquxinxi()">提取信息</a></li>
-                        <li><a href="#">确认链接</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">查看说明</a></li>
-                      </ul>
-                    </div>
+{#                  <div class="input-group text-sm">#}
+{#                    <input type="text" class="input-sm form-control" id="doubanurl" placeholder="例子：http://book.douban.com/subject/1234567">#}
+{#                    <div class="input-group-btn">#}
+{#                      <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">选项 <span class="caret"></span></button>#}
+{#                      <ul class="dropdown-menu pull-right">#}
+{#                        <li><a href="#" id="tiqu" onclick="tiquxinxi()">提取信息</a></li>#}
+{#                       #}
+{#                      </ul>#}
+{#                    </div>#}
+{#                  </div>#}
+
+              <div class="form-inline">
+                  <div class="form-group">
+                    <p class="form-control-static">书籍豆瓣链接:</p>
                   </div>
+                  <div class="form-group">
+                    <label for="inputPassword2" class="sr-only">书籍链接</label>
+                    <input type="text" class="form-control" size="60px;" id="doubanurl" placeholder="https://book.douban.com/subject/27021578">
+                  </div>
+                  <button type="submit" onclick="tiquxinxi()" class="btn btn-default">确认</button>
+              </div>
                 </header>
               <form method="post" action="/UpMobi/" enctype="multipart/form-data">
                <section class="panel panel-default" disabled="disabled"  hidden="hidden">

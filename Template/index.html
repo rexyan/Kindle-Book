@@ -472,11 +472,11 @@
                       <div class="item">
                         <div class="pos-rlt">
                         <div class="top">
-                            <span class="pull-right m-t-sm m-r-sm badge bg-info" id="{{ x.BookID }}">{{ x.DownNum }}</span>
+                            <span class="pull-right m-t-sm m-r-sm badge bg-info" id="{{ x.BookID }}">下载:{{ x.DownNum }}</span>
                         </div>
                           <div class="bottom">
-                            <span id="{{ x.BookID }}z" class="badge bg-info m-l-sm m-b-sm">{{ x.PushNum }}</span>
-                            <span  style="float: right;margin-right: 9px;" class="{{ x.BookID }} badge bg-info m-l-sm m-b-sm">{{ x.zan }}</span>
+                            <span id="{{ x.BookID }}z" class="badge bg-info m-l-sm m-b-sm">推送:{{ x.PushNum }}</span>
+                            <span  style="float: right;margin-right: 9px;" class="{{ x.BookID }} badge bg-info m-l-sm m-b-sm">点赞:{{ x.zan }}</span>
                           </div>
                           <div class="item-overlay opacity r r-2x bg-black">
                             <div class="text-info padder m-t-sm text-sm">
@@ -509,7 +509,7 @@
                         </div>
                         <div class="padder-v">
                           <a  href="/bookdetils/{{ x.BookID }}" class="text-ellipsis">{{x.BookName  }}</a>
-                          <a href="/authordetils/name/{{ x.BookAuthor }}" class="text-ellipsis text-xs text-muted">{{ x.BookAuthor }}</a>
+                          <a href="/authordetils/name/{{ x.BookID }}" class="text-ellipsis text-xs text-muted">{{ x.BookAuthor }}</a>
                         </div>
                       </div>
                     </div>
@@ -558,7 +558,7 @@
                   </span></h4>
                       <div class="list-group bg-white list-group-lg no-bg auto">
                           {% for foo in BookAuthor %}
-                                <a href="/authordetils/name/{{ foo.BookAuthor }}" class="list-group-item clearfix">
+                                <a href="/authordetils/name/{{ foo.BookID }}" class="list-group-item clearfix">
                                   <span class="pull-right h2 text-muted m-l">{{ forloop.counter }}</span>
                                   <span class="clear">
                                     <span>{{ foo.BookAuthor }}</span>
